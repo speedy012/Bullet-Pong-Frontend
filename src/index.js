@@ -366,6 +366,18 @@ let Game = {
       }
     })
     //stop players from moving when no keys are pressed(?)
+    document.addEventListener('keyup', function(key){
+      if(Pong.running === true){
+        //player1
+        if(key.keyCode === 87 || key.keyCode === 83){
+          Pong.player1.move = DIRECTION.IDLE
+        }
+        //player2
+        if(key.keyCode === 80 || key.keyCode === 186){
+          Pong.player2.move = DIRECTION.IDLE
+        }
+      }
+    })
   },
   //reset ball location, player turns, and set delay before next round begins
   _resetTurn: function(winner, loser){
