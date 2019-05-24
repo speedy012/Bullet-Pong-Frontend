@@ -41,7 +41,7 @@ let Paddle = {
       move: DIRECTION.IDLE,
       speed: 10,
       //i added this line, for setting up game start later
-      isReady: false
+      //isReady: false
     }
   }
 }
@@ -59,7 +59,7 @@ let Game = {
 
     this.player1 = Paddle.new.call(this, 'left')
     this.player2 = Paddle.new.call(this, 'right')
-    this.ball = Ball.new.call('this')
+    this.ball = Ball.new.call(this)
 
     this.player2.speed = 8
     this.running = this.over = false
@@ -117,7 +117,7 @@ let Game = {
     this.context.fillStyle = '#ffffff'
     //draw 'press any key to begin' text
     this.context.fillText(
-      'Press any key to begin',
+      'Press space to begin',
       this.canvas.width/2,
       this.canvas.height/2 + 15
     )
@@ -144,7 +144,7 @@ let Game = {
       //move player if the player.move value was updated by a keyboard event
       if(this.player1.move === DIRECTION.UP){
         this.player1.y -= this.player1.speed
-      } else if(this.player.move === DIRECTION.DOWN){
+      } else if(this.player1.move === DIRECTION.DOWN){
         this.player1.y += this.player1.speed
       }
       //PLAYER 2 MOVE
@@ -194,7 +194,7 @@ let Game = {
           this.ball.x = (this.player1.x + this.ball.width)
           this.ball.moveX = DIRECTION.RIGHT
 
-          beep1.play()
+          //beep1.play()
         }
       }
       //PLAYER 2
@@ -203,7 +203,7 @@ let Game = {
           this.ball.x = (this.player2.x - this.ball.width)
           this.ball.moveX = DIRECTION.LEFT
 
-          beep1.play()
+          //beep1.play()
         }
       }
     }
@@ -224,7 +224,7 @@ let Game = {
         this.ball.speed += 1
         this.round += 1
 
-        beep3.play()
+        //beep3.play()
       }
     }
     //check to see if player2 has won
@@ -272,7 +272,7 @@ let Game = {
 
     //draw ball
     if(Pong._turnDelayIsOver.call(this)){
-      this.conext.fillRect(
+      this.context.fillRect(
         this.ball.x,
         this.ball.y,
         this.ball.width,
@@ -338,17 +338,8 @@ let Game = {
 
   listen: function(){
     document.addEventListener('keydown', function(key){
-      //handle pressing keys to start
-      if(key.keyCode == 68){
-        console.log("d key pressed")
-        player1.isReady = true
-      }
-      if(key.keyCode == 75){
-        console.log("k key pressed")
-        player2.isReady = true
-      }
-
-      if(player1.isReady && player2.isReady){
+      //handle pressing key to start
+      if(key.keyCode == 32){
         if(Pong.running === false){
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
@@ -381,7 +372,7 @@ let Game = {
     this.timer = (new Date().getTime())
 
     winner.score++
-    beep2.play()
+    //beep2.play()
   },
 
   //wait for delay to pass after each turn
