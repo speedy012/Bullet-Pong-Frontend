@@ -39,7 +39,7 @@ let Paddle = {
       y: (this.canvas.height/2) - 35,
       score: 0,
       move: DIRECTION.IDLE,
-      speed: 10,
+      speed: 12,
       //i added this line, for setting up game start later
       //isReady: false
     }
@@ -61,7 +61,6 @@ let Game = {
     this.player2 = Paddle.new.call(this, 'right')
     this.ball = Ball.new.call(this)
 
-    this.player2.speed = 8
     this.running = this.over = false
     this.turn = this.player2
     this.timer = this.round = 0
@@ -365,7 +364,7 @@ let Game = {
         }
       }
     })
-    //stop players from moving when no keys are pressed(?)
+    //stop players from moving when no keys are pressed
     document.addEventListener('keyup', function(key){
       if(Pong.running === true){
         //player1
