@@ -292,7 +292,7 @@ let Game = {
 
     //set default canvas font and alight it to center
     this.context.font = '100px Courier New'
-    this.context.textAlignt = 'center'
+    this.context.textAlign = 'center'
 
     //draw player1 score (left)
     this.context.fillText(
