@@ -129,9 +129,11 @@ let Game = {
       //if the fall collides with bound limits - correct x and y coords
       if(this.ball.x <= 0){
         Pong._resetTurn.call(this, this.player2, this.player1)
+        this.color = this._generateRoundColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
         Pong._resetTurn.call(this, this.player1, this.player2)
+        this.color = this._generateRoundColor()
       }
       if(this.ball.y <= 0){
         this.ball.moveY = DIRECTION.DOWN
