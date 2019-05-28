@@ -38,7 +38,7 @@ let Paddle = {
       x: side === 'left' ? 150 : this.canvas.width - 150,
       y: (this.canvas.height/2) - 35,
       score: 0,
-      move: DIRECTION.IDLE,
+      moveY: DIRECTION.IDLE,
       speed: 12,
       //i added this line, for setting up game start later
       //isReady: false
@@ -78,12 +78,15 @@ let Game = {
     this.canvas.style.width = (this.canvas.width/2) + 'px'
     this.canvas.style.height = (this.canvas.height/2) + 'px'
 
-
-    //added miniplayers here
+    //add players
     this.player1 = Paddle.new.call(this, 'left')
     this.player2 = Paddle.new.call(this, 'right')
+
+    //added miniplayers
     this.player1a = MiniPlayer.new.call(this, 'left')
     this.player2a = MiniPlayer.new.call(this, 'right')
+
+    //add ball
     this.ball = Ball.new.call(this)
 
     this.running = this.over = false
@@ -150,7 +153,7 @@ let Game = {
   //Update all objects (move players, ball, increment score, etc)
   update: function(){
     if(!this.over){
-      //if the fall collides with bound limits - correct x and y coords
+      //if the ball collides with bound limits - correct x and y coords
       if(this.ball.x <= 0){
         Pong._resetTurn.call(this, this.player2, this.player1)
         this.color = this._generateRoundColor()
@@ -166,6 +169,21 @@ let Game = {
         this.ball.moveY = DIRECTION.UP
       }
 
+      //controll MiniPlayer collision with bound limits
+      if(this.player1a.y <= 0){
+        this.player1a.moveY = DIRECTION.DOWN
+      }
+      if(this.player1a.y >= this.canvas.height - this.player1a.height){
+        this.player1a.moveY = DIRECTION.UP
+      }
+
+      if(this.player2a.y <= 0){
+        this.player2a.moveY = DIRECTION.DOWN
+      }
+      if(this.player2a.y >= this.canvas.height - this.player2a.height){
+        this.player2a.moveY = DIRECTION.UP
+      }
+
       //PLAYER 1 MOVE
       //move player if the player.move value was updated by a keyboard event
       if(this.player1.move === DIRECTION.UP){
@@ -174,23 +192,12 @@ let Game = {
         this.player1.y += this.player1.speed
       }
 
-
       //MiniPlayer1 move
-      if(this.player1.move === DIRECTION.UP){
+      if(this.player1a.move === DIRECTION.UP){
         this.player1a.y -= this.player1a.speed
-      } else if(this.player1.move === DIRECTION.DOWN){
+      } else if(this.player1a.move === DIRECTION.DOWN){
         this.player1a.y += this.player1a.speed
       }
-
-      //MiniPlayer2 move
-      if(this.player1.move === DIRECTION.UP){
-        this.player1.y -= this.player1.speed
-      } else if(this.player1.move === DIRECTION.DOWN){
-        this.player1.y += this.player1.speed
-      }
-
-
-
 
       //PLAYER 2 MOVE
       if(this.player2.move === DIRECTION.UP){
@@ -198,12 +205,25 @@ let Game = {
       } else if(this.player2.move === DIRECTION.DOWN){
         this.player2.y += this.player2.speed
       }
+
+      //MiniPlayer2 move
+      if(this.player2a.move === DIRECTION.UP){
+        this.player2a.y -= this.player2a.speed
+      } else if(this.player2a.move === DIRECTION.DOWN){
+        this.player2a.y += this.player2a.speed
+      }
+
       //on new serve(start of each turn) move the ball to the correct side
       //randomize direction to add challenge
       if(Pong._turnDelayIsOver.call(this) && this.turn){
         this.ball.moveX = this.turn === this.player1 ? DIRECTION.LEFT : DIRECTION.RIGHT
         this.ball.moveY = [DIRECTION.UP, DIRECTION.DOWN][Math.round(Math.random())]
         this.ball.y = Math.floor(Math.random() * this.canvas.height - 200) + 200
+
+        //start MiniPlayers moving
+        this.player1a.moveY = DIRECTION.UP
+        this.player2a.moveY = DIRECTION.DOWN
+
         this.turn = null
       }
 
@@ -230,6 +250,19 @@ let Game = {
         this.ball.x -= this.ball.speed
       } else if(this.ball.moveX === DIRECTION.RIGHT){
         this.ball.x += this.ball.speed
+      }
+
+      //move MiniPlayers based on moveY value
+      if(this.player1a.moveY === DIRECTION.UP){
+        this.player1a.y -= this.player1a.speed
+      } else if(this.player1a.moveY === DIRECTION.DOWN){
+        this.player1a.y += this.player1a.speed
+      }
+
+      if(this.player2a.moveY === DIRECTION.UP){
+        this.player2a.y -= this.player2a.speed
+      } else if(this.player2a.moveY === DIRECTION.DOWN){
+        this.player2a.y += this.player2a.speed
       }
 
       //handle player-ball collisions
