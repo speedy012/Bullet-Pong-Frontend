@@ -67,7 +67,7 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 3
+      lives: 2
     }
   }
 }
@@ -81,7 +81,7 @@ let Bullet = {
       x: side === 'left' ? 150 : this.canvas.width - 175,
       y: (this.canvas.height/2) - 5,
       move: DIRECTION.IDLE,
-      speed: 10
+      speed: 20
     }
   }
 }
