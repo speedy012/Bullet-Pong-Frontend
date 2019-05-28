@@ -39,7 +39,7 @@ let Paddle = {
       y: (this.canvas.height/2) - 35,
       score: 0,
       move: DIRECTION.IDLE,
-      speed: 10,
+      speed: 12,
       //i added this line, for setting up game start later
       //isReady: false
     }
@@ -61,7 +61,6 @@ let Game = {
     this.player2 = Paddle.new.call(this, 'right')
     this.ball = Ball.new.call(this)
 
-    this.player2.speed = 8
     this.running = this.over = false
     this.turn = this.player2
     this.timer = this.round = 0
@@ -129,9 +128,11 @@ let Game = {
       //if the fall collides with bound limits - correct x and y coords
       if(this.ball.x <= 0){
         Pong._resetTurn.call(this, this.player2, this.player1)
+        this.color = this._generateRoundColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
         Pong._resetTurn.call(this, this.player1, this.player2)
+        this.color = this._generateRoundColor()
       }
       if(this.ball.y <= 0){
         this.ball.moveY = DIRECTION.DOWN
@@ -290,7 +291,7 @@ let Game = {
 
     //set default canvas font and alight it to center
     this.context.font = '100px Courier New'
-    this.context.textAlignt = 'center'
+    this.context.textAlign = 'center'
 
     //draw player1 score (left)
     this.context.fillText(
@@ -363,7 +364,19 @@ let Game = {
         }
       }
     })
-    //stop players from moving when no keys are pressed(?)
+    //stop players from moving when no keys are pressed
+    document.addEventListener('keyup', function(key){
+      if(Pong.running === true){
+        //player1
+        if(key.keyCode === 87 || key.keyCode === 83){
+          Pong.player1.move = DIRECTION.IDLE
+        }
+        //player2
+        if(key.keyCode === 80 || key.keyCode === 186){
+          Pong.player2.move = DIRECTION.IDLE
+        }
+      }
+    })
   },
   //reset ball location, player turns, and set delay before next round begins
   _resetTurn: function(winner, loser){
