@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
+  // const newMusic = new Audio('./assets/blipStream.mp3')
+  // newMusic.play()
 
 })
 
@@ -22,7 +24,7 @@ let player2a = new Image()
 player2a.src = "./assets/miniPlayer.png"
 
 // Music
-let newMusic = new Audio("./assets/blipStream.mp3")
+//let newMusic = new Audio("./assets/blipStream.mp3")
 
 
 //Ball object
@@ -64,9 +66,8 @@ let MiniPlayer = {
       height: 50,
       x: side === 'left' ? 50 : this.canvas.width - 50,
       y: (this.canvas.height/2) - 35,
-
       moveY: DIRECTION.IDLE,
-      speed: 0,
+      speed: 5,
       lives: 3
     }
   }
@@ -128,7 +129,7 @@ let Game = {
     Pong.context.font = '50px Courier New'
     Pong.context.fillStyle = this.color
 
-    //draw the rectanble behind the 'Press space to begin' text
+    //draw the rectangle behind the 'Press space to begin' text
     Pong.context.fillRect(
       Pong.canvas.width/2 - 350,
       Pong.canvas.height/2 - 48,
@@ -149,7 +150,6 @@ let Game = {
       Pong.initialize()
     }, 3000)
   },
-  //I'll also have to change below for two players
   menu: function(){
     //draw all Pong objects in their current state
     Pong.draw()
@@ -179,17 +179,22 @@ let Game = {
     if(!this.over){
       //if the ball collides with bound limits - correct x and y coords
       if(this.ball.x <= 0){
+        console.log("left edge")
         Pong._resetTurn.call(this, this.player2, this.player1)
         this.color = this._generateRoundColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
+        //debugger
+        console.log("right edge")
         Pong._resetTurn.call(this, this.player1, this.player2)
         this.color = this._generateRoundColor()
       }
       if(this.ball.y <= 0){
+        console.log("top")
         this.ball.moveY = DIRECTION.DOWN
       }
-      if(this.ball.y >= this.canvas.height - this.ball.height){
+      if(this.ball.y >= this.canvas.height){
+        console.log("bottom")
         this.ball.moveY = DIRECTION.UP
       }
 
@@ -270,7 +275,6 @@ let Game = {
       }
 
       //PLAYER 1 COLLISION
-      //if the player collides with the bound limits, update the x and y coords
       if(this.player1.y <= 0){
         this.player1.y = 0
         this.bullet1.y = 30
@@ -288,13 +292,17 @@ let Game = {
       }
       //move ball in intended direction based on moveX and moveY values
       if(this.ball.moveY === DIRECTION.UP){
+        //console.log("ball up")
         this.ball.y -= (this.ball.speed/1.5)
       } else if(this.ball.moveY === DIRECTION.DOWN){
+        //console.log("ball down")
         this.ball.y += (this.ball.speed/1.5)
       }
       if(this.ball.moveX === DIRECTION.LEFT){
+        //console.log("ball left")
         this.ball.x -= this.ball.speed
       } else if(this.ball.moveX === DIRECTION.RIGHT){
+        //console.log("ball right")
         this.ball.x += this.ball.speed
       }
 
@@ -313,17 +321,19 @@ let Game = {
 
       //handle player-ball collisions
       //PLAYER 1
-      if(this.ball.x - this.ball.width <= this.player1.x && this.ball.y + this.ball.height >= this.player1.y){
-        if(this.ball.y <= this.player1.y + this.player1.height){
-          this.ball.x = (this.player1.x + this.ball.width)
-          this.ball.moveX = DIRECTION.RIGHT
+      if (this.ball.x - this.ball.width <= this.player1.x && this.ball.x >= this.player1.x - this.player1.width) {
+				if (this.ball.y <= this.player1.y + this.player1.height && this.ball.y + this.ball.height >= this.player1.y) {
+					this.ball.x = (this.player1.x + this.ball.width);
+          console.log("ball with player1")
+					this.ball.moveX = DIRECTION.RIGHT;
         }
       }
       //PLAYER 2
-      if(this.ball.x - this.ball.width <= this.player2.x && this.ball.x >= this.player2.x - this.player2.width){
-        if(this.ball.y <= this.player2.y + this.player2.height){
-          this.ball.x = (this.player2.x - this.ball.width)
-          this.ball.moveX = DIRECTION.LEFT
+      if (this.ball.x - this.ball.width <= this.player2.x && this.ball.x >= this.player2.x - this.player2.width) {
+				if (this.ball.y <= this.player2.y + this.player2.height && this.ball.y + this.ball.height >= this.player2.y) {
+					this.ball.x = (this.player2.x - this.ball.width);
+          console.log("ball with player2")
+					this.ball.moveX = DIRECTION.LEFT;
         }
       }
 
@@ -531,7 +541,7 @@ let Game = {
         if(Pong.running === false){
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
-          newMusic.play()
+          //newMusic.play()
         }
       }
 
