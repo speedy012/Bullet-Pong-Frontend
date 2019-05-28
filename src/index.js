@@ -366,7 +366,7 @@ let Game = {
         }
       }
 
-      //paddle collision with bullet
+      //bullet goes off screen
       if(this.bullet1.x - this.bullet1.width >= this.canvas.width){
         console.log("bullet1 miss")
         console.log(`${this.player2a.lives}`)
@@ -382,7 +382,27 @@ let Game = {
         this.bullet2.y = (this.player2.y + (this.player2.height/2))
         this.bullet2.move = DIRECTION.IDLE
       }
-      //bullet goes off screen
+
+      //bullet collision paddle
+      if(this.bullet1.x - this.bullet1.width >= this.player2.x && this.bullet1.y + this.bullet1.height >= this.player2.y){
+        if(this.bullet1.y <= this.player2.y + this.player2.height){
+          console.log("player2 shielded")
+          console.log(`${this.player2a.lives}`)
+          this.bullet1.x = (this.player1.x + this.player1.width)
+          this.bullet1.y = (this.player1.y + (this.player1.height/2))
+          this.bullet1.move = DIRECTION.IDLE
+        }
+      }
+      //bullet2
+      if(this.bullet2.x <= this.player1.x && this.bullet2.y + this.bullet2.height >= this.player1.y){
+        if(this.bullet2.y <= this.player1.y + this.player1.height){
+          console.log("player1 shielded")
+          console.log(`${this.player1a.lives}`)
+          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.y = (this.player2.y + (this.player2.height/2))
+          this.bullet2.move = DIRECTION.IDLE
+        }
+      }
     }
 
     //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
