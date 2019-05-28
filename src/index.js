@@ -508,3 +508,5 @@ let Game = {
 
 var Pong = Object.assign({}, Game)
 Pong.initialize()
+
+//work on image
