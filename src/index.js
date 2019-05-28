@@ -51,12 +51,10 @@ let Paddle = {
       score: 0,
       moveY: DIRECTION.IDLE,
       speed: 12,
-      //i added this line, for setting up game start later
-      //isReady: false
+
     }
   }
 }
-
 
 //MiniPlayers object
 let MiniPlayer = {
@@ -64,19 +62,29 @@ let MiniPlayer = {
     return {
       width: 35,
       height: 50,
-      // x: side === 'left' ? 50 : (this.canvas.width/2) - 50,
-      // y: (this.canvas.height/2) - 50,
-
       x: side === 'left' ? 50 : this.canvas.width - 50,
       y: (this.canvas.height/2) - 35,
-      move: DIRECTION.IDLE,
-      speed: 6,
-      //i added this line, for setting up game start later
-      //isReady: false
+
+      moveY: DIRECTION.IDLE,
+      speed: 0,
+      lives: 3
     }
   }
 }
 
+//creating bullets
+let Bullet = {
+  new: function(side){
+    return{
+      width: 40,
+      height: 12,
+      x: side === 'left' ? 150 : this.canvas.width - 175,
+      y: (this.canvas.height/2) - 5,
+      move: DIRECTION.IDLE,
+      speed: 10
+    }
+  }
+}
 
 let Game = {
   initialize: function(){
@@ -93,13 +101,14 @@ let Game = {
     //add players
     this.player1 = Paddle.new.call(this, 'left')
     this.player2 = Paddle.new.call(this, 'right')
-
-    //added miniplayers
+    //add miniplayers
     this.player1a = MiniPlayer.new.call(this, 'left')
      // this.player1a = new Image();
     // this.player1a.src = "./Images/miniPlayer.png"
     this.player2a = MiniPlayer.new.call(this, 'right')
-    this.player2a.src = "./Images/miniPlayer.png"
+    //add bullets
+    this.bullet1 = Bullet.new.call(this, 'left')
+    this.bullet2 = Bullet.new.call(this, 'right')
 
 
     //add ball
@@ -119,8 +128,7 @@ let Game = {
     Pong.context.font = '50px Courier New'
     Pong.context.fillStyle = this.color
 
-    //I'll have to change this part to have it run twice, once for each of the players
-    //draw the rectanble behind the 'Press any key to begin' text
+    //draw the rectanble behind the 'Press space to begin' text
     Pong.context.fillRect(
       Pong.canvas.width/2 - 350,
       Pong.canvas.height/2 - 48,
@@ -129,7 +137,7 @@ let Game = {
     )
     //change the canvas color
     Pong.context.fillStyle = '#ffffff'
-    //draw the end game menu text ('game over' and 'winner')
+    //draw the end game menu text
     Pong.context.fillText(
       text,
       Pong.canvas.width/2,
@@ -204,10 +212,19 @@ let Game = {
       //move player if the player.move value was updated by a keyboard event
       if(this.player1.move === DIRECTION.UP){
         this.player1.y -= this.player1.speed
+        if(this.bullet1.move === DIRECTION.IDLE){
+          this.bullet1.y -= this.player1.speed
+        } else if(this.bullet1.move === DIRECTION.LEFT){
+          this.bullet1.y = this.bullet1.y
+        }
       } else if(this.player1.move === DIRECTION.DOWN){
         this.player1.y += this.player1.speed
+        if(this.bullet1.move === DIRECTION.IDLE){
+          this.bullet1.y += this.player1.speed
+        } else if(this.bullet1.move === DIRECTION.LEFT){
+          this.bullet1.y = this.bullet1.y
+        }
       }
-
       //MiniPlayer1 move
       if(this.player1a.move === DIRECTION.UP){
         this.player1a.y -= this.player1a.speed
@@ -218,10 +235,19 @@ let Game = {
       //PLAYER 2 MOVE
       if(this.player2.move === DIRECTION.UP){
         this.player2.y -= this.player2.speed
+        if(this.bullet2.move === DIRECTION.IDLE){
+          this.bullet2.y -= this.player2.speed
+        } else if(this.bullet2.move === DIRECTION.RIGHT){
+          this.bullet2.y = this.bullet2.y
+        }
       } else if(this.player2.move === DIRECTION.DOWN){
         this.player2.y += this.player2.speed
+        if(this.bullet2.move === DIRECTION.IDLE){
+          this.bullet2.y += this.player2.speed
+        } else if(this.bullet2.move === DIRECTION.RIGHT){
+          this.bullet2.y = this.bullet2.y
+        }
       }
-
       //MiniPlayer2 move
       if(this.player2a.move === DIRECTION.UP){
         this.player2a.y -= this.player2a.speed
@@ -247,14 +273,18 @@ let Game = {
       //if the player collides with the bound limits, update the x and y coords
       if(this.player1.y <= 0){
         this.player1.y = 0
+        this.bullet1.y = 30
       } else if(this.player1.y >= (this.canvas.height - this.player1.height)){
         this.player1.y = (this.canvas.height - this.player1.height)
+        this.bullet1.y = (this.canvas.height - 40)
       }
       //PLAYER 2 COLLISION
       if(this.player2.y <= 0){
         this.player2.y = 0
+        this.bullet2.y = 30
       } else if(this.player2.y >= (this.canvas.height - this.player2.height)){
         this.player2.y = (this.canvas.height - this.player2.height)
+        this.bullet2.y = (this.canvas.height - 40)
       }
       //move ball in intended direction based on moveX and moveY values
       if(this.ball.moveY === DIRECTION.UP){
@@ -284,20 +314,48 @@ let Game = {
       //handle player-ball collisions
       //PLAYER 1
       if(this.ball.x - this.ball.width <= this.player1.x && this.ball.y + this.ball.height >= this.player1.y){
-        if(this.ball.y <= this.player1.y + this.player1.height && this.ball.y + this.ball.height >= this.player1.y){
+        if(this.ball.y <= this.player1.y + this.player1.height){
           this.ball.x = (this.player1.x + this.ball.width)
           this.ball.moveX = DIRECTION.RIGHT
-
-          //beep1.play()
         }
       }
       //PLAYER 2
       if(this.ball.x - this.ball.width <= this.player2.x && this.ball.x >= this.player2.x - this.player2.width){
-        if(this.ball.y <= this.player2.y + this.player2.height && this.ball.y + this.ball.height >= this.player2.y){
+        if(this.ball.y <= this.player2.y + this.player2.height){
           this.ball.x = (this.player2.x - this.ball.width)
           this.ball.moveX = DIRECTION.LEFT
+        }
+      }
 
-          //beep1.play()
+      //move bullet based on direction
+      if(this.bullet1.move === DIRECTION.LEFT){
+        this.bullet1.x += this.bullet1.speed
+      }
+      if(this.bullet2.move === DIRECTION.RIGHT){
+        this.bullet2.x -= this.bullet2.speed
+      }
+
+      //MiniPlayer collisions with bullet
+      if(this.bullet1.x - this.bullet1.width >= this.player2a.x && this.bullet1.y + this.bullet1.height >= this.player2a.y){
+        if(this.bullet1.y <= this.player2a.y + this.player2a.height){
+          console.log("player2 hit")
+          this.player2a.lives -= 1
+          console.log(`${this.player2a.lives}`)
+          this.bullet1.x = (this.player1.x + this.player1.width)
+          this.bullet1.y = (this.player1.y + (this.player1.height/2))
+          this.bullet1.move = DIRECTION.IDLE
+        }
+      }
+      //bullet2
+      if(this.bullet2.x <= this.player1a.x && this.bullet2.y + this.bullet2.height >= this.player1a.y){
+        if(this.bullet2.y <= this.player1a.y + this.player1a.height){
+          console.log("player1 hit")
+          this.player1a.lives -= 1
+          console.log(`${this.player1a.lives}`)
+          //debugger
+          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.y = (this.player2.y + (this.player2.height/2))
+          this.bullet2.move = DIRECTION.IDLE
         }
       }
     }
@@ -357,13 +415,22 @@ let Game = {
       this.player1.height
     )
 
+
     //draw MiniPlayer1
     this.context.drawImage(
       player1a,
+
       this.player1a.x,
       this.player1a.y,
       this.player1a.width,
       this.player1a.height
+    )
+    //draw bullet1
+    this.context.fillRect(
+      this.bullet1.x,
+      this.bullet1.y,
+      this.bullet1.width,
+      this.bullet1.height
     )
 
     // draw player2
@@ -373,7 +440,6 @@ let Game = {
       this.player2.width,
       this.player2.height
     )
-
     //draw MiniPlayer2
     this.context.drawImage(
       player2a,
@@ -381,6 +447,13 @@ let Game = {
       this.player2a.y,
       this.player2a.width,
       this.player2a.height
+    )
+    //draw bullet2
+    this.context.fillRect(
+      this.bullet2.x,
+      this.bullet2.y,
+      this.bullet2.width,
+      this.bullet2.height
     )
 
     //draw ball
@@ -470,12 +543,24 @@ let Game = {
         } else if(key.keyCode === 83){
           Pong.player1.move = DIRECTION.DOWN
         }
+        //fire bullet
+        if(key.keyCode === 68){
+          console.log("d pressed")
+          Pong.bullet1.move = DIRECTION.LEFT
+          console.log("bullet1 fired")
+        }
 
         //player2
         if(key.keyCode === 80){
           Pong.player2.move = DIRECTION.UP
         } else if(key.keyCode === 186){
           Pong.player2.move = DIRECTION.DOWN
+        }
+        //fire bullet
+        if(key.keyCode === 76){
+          console.log("l pressed")
+          Pong.bullet2.move = DIRECTION.RIGHT
+          console.log("bullet2 fired")
         }
       }
     })
