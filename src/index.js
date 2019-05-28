@@ -291,17 +291,13 @@ let Game = {
       }
       //move ball in intended direction based on moveX and moveY values
       if(this.ball.moveY === DIRECTION.UP){
-        //console.log("ball up")
         this.ball.y -= (this.ball.speed/1.5)
       } else if(this.ball.moveY === DIRECTION.DOWN){
-        //console.log("ball down")
         this.ball.y += (this.ball.speed/1.5)
       }
       if(this.ball.moveX === DIRECTION.LEFT){
-        //console.log("ball left")
         this.ball.x -= this.ball.speed
       } else if(this.ball.moveX === DIRECTION.RIGHT){
-        //console.log("ball right")
         this.ball.x += this.ball.speed
       }
 
@@ -353,6 +349,7 @@ let Game = {
           this.bullet1.x = (this.player1.x + this.player1.width)
           this.bullet1.y = (this.player1.y + (this.player1.height/2))
           this.bullet1.move = DIRECTION.IDLE
+          this.player1.score += 1
         }
       }
       //bullet2
@@ -365,8 +362,27 @@ let Game = {
           this.bullet2.x = (this.player2.x - this.player2.width)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
+          this.player2.score += 1
         }
       }
+
+      //paddle collision with bullet
+      if(this.bullet1.x - this.bullet1.width >= this.canvas.width){
+        console.log("bullet1 miss")
+        console.log(`${this.player2a.lives}`)
+        this.bullet1.x = (this.player1.x + this.player1.width)
+        this.bullet1.y = (this.player1.y + (this.player1.height/2))
+        this.bullet1.move = DIRECTION.IDLE
+      }
+      //bullet2
+      if(this.bullet2.x - this.bullet2.width <= 0){
+        console.log("bullet2 miss")
+        console.log(`${this.player1a.lives}`)
+        this.bullet2.x = (this.player2.x - this.player2.width)
+        this.bullet2.y = (this.player2.y + (this.player2.height/2))
+        this.bullet2.move = DIRECTION.IDLE
+      }
+      //bullet goes off screen
     }
 
     //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
