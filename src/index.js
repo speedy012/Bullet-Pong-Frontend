@@ -54,7 +54,7 @@ let MiniPlayer = {
       x: side === 'left' ? 50 : this.canvas.width - 50,
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
-      speed: 10,
+      speed: 0,
       lives: 3
     }
   }
@@ -196,10 +196,18 @@ let Game = {
       //move player if the player.move value was updated by a keyboard event
       if(this.player1.move === DIRECTION.UP){
         this.player1.y -= this.player1.speed
-        this.bullet1.y -= this.player1.speed
+        if(this.bullet1.move === DIRECTION.IDLE){
+          this.bullet1.y -= this.player1.speed
+        } else if(this.bullet1.move === DIRECTION.LEFT){
+          this.bullet1.y = this.bullet1.y
+        }
       } else if(this.player1.move === DIRECTION.DOWN){
         this.player1.y += this.player1.speed
-        this.bullet1.y += this.player1.speed
+        if(this.bullet1.move === DIRECTION.IDLE){
+          this.bullet1.y += this.player1.speed
+        } else if(this.bullet1.move === DIRECTION.LEFT){
+          this.bullet1.y = this.bullet1.y
+        }
       }
       //MiniPlayer1 move
       if(this.player1a.move === DIRECTION.UP){
@@ -211,10 +219,18 @@ let Game = {
       //PLAYER 2 MOVE
       if(this.player2.move === DIRECTION.UP){
         this.player2.y -= this.player2.speed
-        this.bullet2.y -= this.player2.speed
+        if(this.bullet2.move === DIRECTION.IDLE){
+          this.bullet2.y -= this.player2.speed
+        } else if(this.bullet2.move === DIRECTION.RIGHT){
+          this.bullet2.y = this.bullet2.y
+        }
       } else if(this.player2.move === DIRECTION.DOWN){
         this.player2.y += this.player2.speed
-        this.bullet2.y += this.player2.speed
+        if(this.bullet2.move === DIRECTION.IDLE){
+          this.bullet2.y += this.player2.speed
+        } else if(this.bullet2.move === DIRECTION.RIGHT){
+          this.bullet2.y = this.bullet2.y
+        }
       }
       //MiniPlayer2 move
       if(this.player2a.move === DIRECTION.UP){
@@ -241,7 +257,6 @@ let Game = {
       //if the player collides with the bound limits, update the x and y coords
       if(this.player1.y <= 0){
         this.player1.y = 0
-        //adjust bullet y with if statement: if direction idle
         this.bullet1.y = 30
       } else if(this.player1.y >= (this.canvas.height - this.player1.height)){
         this.player1.y = (this.canvas.height - this.player1.height)
@@ -283,14 +298,14 @@ let Game = {
       //handle player-ball collisions
       //PLAYER 1
       if(this.ball.x - this.ball.width <= this.player1.x && this.ball.y + this.ball.height >= this.player1.y){
-        if(this.ball.y <= this.player1.y + this.player1.height && this.ball.y + this.ball.height >= this.player1.y){
+        if(this.ball.y <= this.player1.y + this.player1.height){
           this.ball.x = (this.player1.x + this.ball.width)
           this.ball.moveX = DIRECTION.RIGHT
         }
       }
       //PLAYER 2
       if(this.ball.x - this.ball.width <= this.player2.x && this.ball.x >= this.player2.x - this.player2.width){
-        if(this.ball.y <= this.player2.y + this.player2.height && this.ball.y + this.ball.height >= this.player2.y){
+        if(this.ball.y <= this.player2.y + this.player2.height){
           this.ball.x = (this.player2.x - this.ball.width)
           this.ball.moveX = DIRECTION.LEFT
         }
@@ -300,16 +315,31 @@ let Game = {
       if(this.bullet1.move === DIRECTION.LEFT){
         this.bullet1.x += this.bullet1.speed
       }
+      if(this.bullet2.move === DIRECTION.RIGHT){
+        this.bullet2.x -= this.bullet2.speed
+      }
 
       //MiniPlayer collisions with bullet
-      if(this.player1a.x - this.bullet2.width <= this.player1a.x && this.bullet2.x >= this.player1a.x - this.player1a.width){
-        if(this.bullet2.y <= this.player1a.y + this.player1a.height && this.bullet2.y + this.bullet2.height >= this.player1a.y){
-          this.player1a.lives -= 1
+      if(this.bullet1.x - this.bullet1.width >= this.player2a.x && this.bullet1.y + this.bullet1.height >= this.player2a.y){
+        if(this.bullet1.y <= this.player2a.y + this.player2a.height){
+          console.log("player2 hit")
+          this.player2a.lives -= 1
+          console.log(`${this.player2a.lives}`)
+          this.bullet1.x = (this.player1.x + this.player1.width)
+          this.bullet1.y = (this.player1.y + (this.player1.height/2))
+          this.bullet1.move = DIRECTION.IDLE
         }
       }
-      if(this.player2a.x - this.bullet1.width <= this.player2a.x && this.bullet2.x >= this.player2a.x - this.player2a.width){
-        if(this.bullet1.y <= this.player2a.y + this.player2a.height && this.bullet1.y + this.bullet2.height >= this.player2a.y){
-          this.player2a.lives -= 1
+      //bullet2
+      if(this.bullet2.x <= this.player1a.x && this.bullet2.y + this.bullet2.height >= this.player1a.y){
+        if(this.bullet2.y <= this.player1a.y + this.player1a.height){
+          console.log("player1 hit")
+          this.player1a.lives -= 1
+          console.log(`${this.player1a.lives}`)
+          //debugger
+          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.y = (this.player2.y + (this.player2.height/2))
+          this.bullet2.move = DIRECTION.IDLE
         }
       }
     }
@@ -505,7 +535,9 @@ let Game = {
         }
         //fire bullet
         if(key.keyCode === 76){
+          console.log("l pressed")
           Pong.bullet2.move = DIRECTION.RIGHT
+          console.log("bullet2 fired")
         }
       }
     })
