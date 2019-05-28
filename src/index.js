@@ -349,7 +349,7 @@ let Game = {
           this.bullet1.x = (this.player1.x + this.player1.width)
           this.bullet1.y = (this.player1.y + (this.player1.height/2))
           this.bullet1.move = DIRECTION.IDLE
-          this.player1.score += 1
+          this.player1.score += 5
         }
       }
       //bullet2
@@ -362,7 +362,7 @@ let Game = {
           this.bullet2.x = (this.player2.x - this.player2.width)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
-          this.player2.score += 1
+          this.player2.score += 5
         }
       }
 
@@ -407,25 +407,11 @@ let Game = {
 
     //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
     //check to see if player1 won the round
-    if(this.player1.score === rounds[this.round]){
-      //check to see if there are any more rounds/levels left and display victory screen if there are not
-      if(!rounds[this.round + 1]){
-        this.over = true
-        setTimeout(function(){ Pong.endGameMenu('Player 1 Wins!')}, 1000)
-      } else {
-        //if there is another round, reset all values and increment round number
-        this.color = this._generateRoundColor()
-        this.player1.score = this.player2.score = 0
-        this.player1.speed += 0.5
-        this.player2.speed += 0.5
-        this.ball.speed += 1
-        this.round += 1
-
-        //beep3.play()
-      }
-    }
-    //check to see if player2 has won
-    else if(this.player2.score === rounds[this.round]){
+    if(this.player2a.lives === 0){
+      this.over = true
+      setTimeout(function(){
+        Pong.endGameMenu('Player 1 Wins!')}, 1000)
+    } else if(this.player1a.lives === 0){
       this.over = true
       setTimeout(function(){ Pong.endGameMenu('Player 2 Wins!')}, 1000)
     }
