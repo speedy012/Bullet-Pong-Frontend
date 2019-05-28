@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
-  // const newMusic = new Audio('./assets/blipStream.mp3')
-  // newMusic.play()
-
+  //let newMusic = new Audio('./assets/blipStream.mp3')
+  //newMusic.play()
 })
 
 //Global Variables
