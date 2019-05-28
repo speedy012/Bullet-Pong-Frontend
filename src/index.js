@@ -46,6 +46,27 @@ let Paddle = {
   }
 }
 
+
+//MiniPlayers object
+let MiniPlayer = {
+  new: function(side){
+    return {
+      width: 18,
+      height: 50,
+      // x: side === 'left' ? 50 : (this.canvas.width/2) - 50,
+      // y: (this.canvas.height/2) - 50,
+
+      x: side === 'left' ? 50 : this.canvas.width - 50,
+      y: (this.canvas.height/2) - 35,
+      move: DIRECTION.IDLE,
+      speed: 10,
+      //i added this line, for setting up game start later
+      //isReady: false
+    }
+  }
+}
+
+
 let Game = {
   initialize: function(){
     this.canvas = document.querySelector('canvas')
@@ -57,8 +78,12 @@ let Game = {
     this.canvas.style.width = (this.canvas.width/2) + 'px'
     this.canvas.style.height = (this.canvas.height/2) + 'px'
 
+
+    //added miniplayers here
     this.player1 = Paddle.new.call(this, 'left')
     this.player2 = Paddle.new.call(this, 'right')
+    this.player1a = MiniPlayer.new.call(this, 'left')
+    this.player2a = MiniPlayer.new.call(this, 'right')
     this.ball = Ball.new.call(this)
 
     this.player2.speed = 8
@@ -147,6 +172,25 @@ let Game = {
       } else if(this.player1.move === DIRECTION.DOWN){
         this.player1.y += this.player1.speed
       }
+
+
+      //MiniPlayer1 move
+      if(this.player1.move === DIRECTION.UP){
+        this.player1a.y -= this.player1a.speed
+      } else if(this.player1.move === DIRECTION.DOWN){
+        this.player1a.y += this.player1a.speed
+      }
+
+      //MiniPlayer2 move
+      if(this.player1.move === DIRECTION.UP){
+        this.player1.y -= this.player1.speed
+      } else if(this.player1.move === DIRECTION.DOWN){
+        this.player1.y += this.player1.speed
+      }
+
+
+
+
       //PLAYER 2 MOVE
       if(this.player2.move === DIRECTION.UP){
         this.player2.y -= this.player2.speed
@@ -262,13 +306,39 @@ let Game = {
       this.player1.width,
       this.player1.height
     )
-    //draw player2
+
+    //draw miniPlayer1
+    this.context.fillRect(
+      // this.player1a.ctx.beginPath()
+      // this.player1a.ctx.arc(100, 75, 50, 0, 2 * Math.PI)
+      // this.player1a.ctx.stroke()
+
+      this.player1a.x,
+      this.player1a.y,
+      this.player1a.width,
+      this.player1a.height
+    )
+
+    // draw player2
     this.context.fillRect(
       this.player2.x,
       this.player2.y,
       this.player2.width,
       this.player2.height
     )
+
+    //draw MiniPlayer2
+    this.context.fillRect(
+      // this.player2a.ctx.beginPath()
+      // this.player2a.ctx.arc(100, 75, 50, 0, 2 * Math.PI)
+      // this.player2a.ctx.stroke()
+      this.player2a.x,
+      this.player2a.y,
+      this.player2a.width,
+      this.player2a.height
+    )
+
+
 
     //draw ball
     if(Pong._turnDelayIsOver.call(this)){
