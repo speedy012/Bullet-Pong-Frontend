@@ -14,6 +14,17 @@ let DIRECTION = {
 let rounds = [5, 5, 3, 3, 2]
 let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 
+//Create & Add Images
+let player1a = new Image()
+player1a.src = "./assets/miniPlayer.png"
+
+let player2a = new Image()
+player2a.src = "./assets/miniPlayer.png"
+
+// Music
+let newMusic = new Audio("./assets/blipStream.mp3")
+
+
 //Ball object
 let Ball = {
   new: function(incredmentedSpeed){
@@ -49,10 +60,11 @@ let Paddle = {
 let MiniPlayer = {
   new: function(side){
     return {
-      width: 18,
+      width: 35,
       height: 50,
       x: side === 'left' ? 50 : this.canvas.width - 50,
       y: (this.canvas.height/2) - 35,
+
       moveY: DIRECTION.IDLE,
       speed: 0,
       lives: 3
@@ -76,6 +88,7 @@ let Bullet = {
 
 let Game = {
   initialize: function(){
+
     this.canvas = document.querySelector('canvas')
     this.context = this.canvas.getContext('2d')
 
@@ -90,10 +103,13 @@ let Game = {
     this.player2 = Paddle.new.call(this, 'right')
     //add miniplayers
     this.player1a = MiniPlayer.new.call(this, 'left')
+     // this.player1a = new Image();
+    // this.player1a.src = "./Images/miniPlayer.png"
     this.player2a = MiniPlayer.new.call(this, 'right')
     //add bullets
     this.bullet1 = Bullet.new.call(this, 'left')
     this.bullet2 = Bullet.new.call(this, 'right')
+
 
     //add ball
     this.ball = Ball.new.call(this)
@@ -398,8 +414,12 @@ let Game = {
       this.player1.width,
       this.player1.height
     )
-    //draw miniPlayer1
-    this.context.fillRect(
+
+
+    //draw MiniPlayer1
+    this.context.drawImage(
+      player1a,
+
       this.player1a.x,
       this.player1a.y,
       this.player1a.width,
@@ -421,7 +441,8 @@ let Game = {
       this.player2.height
     )
     //draw MiniPlayer2
-    this.context.fillRect(
+    this.context.drawImage(
+      player2a,
       this.player2a.x,
       this.player2a.y,
       this.player2a.width,
@@ -464,6 +485,7 @@ let Game = {
       (this.canvas.width/2) - 300,
       200
     )
+
     //draw player2 score (right)
     this.context.fillText(
       this.player2.score.toString(),
@@ -509,6 +531,7 @@ let Game = {
         if(Pong.running === false){
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
+          newMusic.play()
         }
       }
 
@@ -555,6 +578,7 @@ let Game = {
       }
     })
   },
+
   //reset ball location, player turns, and set delay before next round begins
   _resetTurn: function(winner, loser){
     this.ball = Ball.new.call(this, this.ball.speed)
@@ -582,5 +606,3 @@ let Game = {
 
 var Pong = Object.assign({}, Game)
 Pong.initialize()
-
-//work on image
