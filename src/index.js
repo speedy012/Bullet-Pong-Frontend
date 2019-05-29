@@ -372,6 +372,7 @@ let Game = {
         this.bullet1.x = 110
         this.bullet1.y = (this.player1.y + (this.player1.height/2))
         this.bullet1.move = DIRECTION.IDLE
+        this.player1.score -= 1
       }
       //bullet2
       if(this.bullet2.x - this.bullet2.width <= 0){
@@ -380,6 +381,7 @@ let Game = {
         this.bullet2.x = (this.canvas.width - 135)
         this.bullet2.y = (this.player2.y + (this.player2.height/2))
         this.bullet2.move = DIRECTION.IDLE
+        this.player2.score -= 1
       }
 
       //bullet collision paddle
@@ -390,7 +392,7 @@ let Game = {
           this.bullet1.x = 110
           this.bullet1.y = (this.player1.y + this.player1.height/2)
           this.bullet1.move = DIRECTION.IDLE
-          this.player1.score -= 2
+          this.player1.score -= 3
         }
       }
       //bullet2
@@ -401,7 +403,7 @@ let Game = {
           this.bullet2.x = (this.canvas.width - 135)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
-          this.player2.score -= 2
+          this.player2.score -= 3
         }
       }
     }
