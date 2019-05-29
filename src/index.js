@@ -17,10 +17,10 @@ let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 
 //Create & Add Images
 let player1a = new Image()
-player1a.src = "./assets/miniPlayer.png"
+player1a.src = "./assets/MiniPlayerNormal.png"
 
 let player2a = new Image()
-player2a.src = "./assets/miniPlayer.png"
+player2a.src = "./assets/MiniPlayerNormal.png"
 
 // Music
 //let newMusic = new Audio("./assets/blipStream.mp3")
@@ -67,7 +67,7 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 2
+      lives: 3
     }
   }
 }
@@ -78,10 +78,10 @@ let Bullet = {
     return{
       width: 40,
       height: 12,
-      x: side === 'left' ? 150 : this.canvas.width - 175,
+      x: side === 'left' ? 110 : this.canvas.width - 135,
       y: (this.canvas.height/2) - 5,
       move: DIRECTION.IDLE,
-      speed: 20
+      speed: 20,
     }
   }
 }
@@ -346,7 +346,7 @@ let Game = {
           console.log("player2 hit")
           this.player2a.lives -= 1
           console.log(`${this.player2a.lives}`)
-          this.bullet1.x = (this.player1.x + this.player1.width)
+          this.bullet1.x = 110
           this.bullet1.y = (this.player1.y + (this.player1.height/2))
           this.bullet1.move = DIRECTION.IDLE
           this.player1.score += 5
@@ -358,8 +358,7 @@ let Game = {
           console.log("player1 hit")
           this.player1a.lives -= 1
           console.log(`${this.player1a.lives}`)
-          //debugger
-          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.x = (this.canvas.width - 135)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
           this.player2.score += 5
@@ -370,17 +369,19 @@ let Game = {
       if(this.bullet1.x - this.bullet1.width >= this.canvas.width){
         console.log("bullet1 miss")
         console.log(`${this.player2a.lives}`)
-        this.bullet1.x = (this.player1.x + this.player1.width)
+        this.bullet1.x = 110
         this.bullet1.y = (this.player1.y + (this.player1.height/2))
         this.bullet1.move = DIRECTION.IDLE
+        this.player1.score -= 1
       }
       //bullet2
       if(this.bullet2.x - this.bullet2.width <= 0){
         console.log("bullet2 miss")
         console.log(`${this.player1a.lives}`)
-        this.bullet2.x = (this.player2.x - this.player2.width)
+        this.bullet2.x = (this.canvas.width - 135)
         this.bullet2.y = (this.player2.y + (this.player2.height/2))
         this.bullet2.move = DIRECTION.IDLE
+        this.player2.score -= 1
       }
 
       //bullet collision paddle
@@ -388,9 +389,11 @@ let Game = {
         if(this.bullet1.y <= this.player2.y + this.player2.height){
           console.log("player2 shielded")
           console.log(`${this.player2a.lives}`)
-          this.bullet1.x = (this.player1.x + this.player1.width)
-          this.bullet1.y = (this.player1.y + (this.player1.height/2))
+          this.bullet1.x = 110
+          this.bullet1.y = (this.player1.y + this.player1.height/2)
           this.bullet1.move = DIRECTION.IDLE
+          this.player1.score -= 3
+          this.player2.score += 2
         }
       }
       //bullet2
@@ -398,9 +401,11 @@ let Game = {
         if(this.bullet2.y <= this.player1.y + this.player1.height){
           console.log("player1 shielded")
           console.log(`${this.player1a.lives}`)
-          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.x = (this.canvas.width - 135)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
+          this.player2.score -= 3
+          this.player1.score += 2
         }
       }
     }
