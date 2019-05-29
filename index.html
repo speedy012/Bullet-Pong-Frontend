@@ -2,13 +2,28 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <title>Bullet Pong</title>
   </head>
-  <body>
-    <canvas></canvas>
-
+  <body >
+    <div>
+      <hi> Bullet Pong </h1>
+    </div>
+      <div class="main">
+      <div class="left nes-container">
+       <p> UP: W </p>
+       <p> DOWN: S </p>
+       <p> SHOOT: D </p>
+      </div>
+      <canvas></canvas>
+      <div class="right nes-container">
+        <p> UP: P </p>
+        <p> DOWN: ; </p>
+        <p> SHOOT: L </p>
+      </div>
+    </div>
   </body>
   <script src="./src/index.js"></script>
-  <audio controls preload="auto">
-    <source src="./assets/blipStream.mp3"/>
 </html>

@@ -1,0 +1,15 @@
+.main {
+  display: flex;
+  padding-top: 10%;
+}
+
+
+.left.nes-container {
+  padding-top: 15%;
+  justify-content: space-evenly;
+  
+}
+
+.right.nes-container {
+  padding-top: 15%;
+}
