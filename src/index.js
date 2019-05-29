@@ -17,9 +17,20 @@ let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 //Create & Add Images
 let player1a = new Image()
 player1a.src = "./assets/MiniPlayerNormal.png"
-
 let player2a = new Image()
 player2a.src = "./assets/MiniPlayerNormal.png"
+let heart1a = new Image()
+heart1a.src = "./assets/FullHeart.png"
+let heart1b = new Image()
+heart1a.src = "./assets/FullHeart.png"
+let heart1c = new Image()
+heart1a.src = "./assets/FullHeart.png"
+let heart2a = new Image()
+heart1a.src = "./assets/FullHeart.png"
+let heart2b = new Image()
+heart1a.src = "./assets/FullHeart.png"
+let heart2c = new Image()
+heart1a.src = "./assets/FullHeart.png"
 
 // Music
 let sound = new Audio()
@@ -55,7 +66,6 @@ let Paddle = {
       score: 0,
       moveY: DIRECTION.IDLE,
       speed: 12,
-
     }
   }
 }
@@ -63,6 +73,12 @@ let Paddle = {
 //MiniPlayers object
 let MiniPlayer = {
   new: function(side){
+    let objectHeart1a = {x: 150, y: 20, width: 31, height: 31}
+    let objectHeart1b = {x: 100, y: 20, width: 31, height: 31}
+    let objectHeart1c = {x: 50, y: 20, width: 31, height: 31}
+    let objectHeart2a = {x: this.canvas.width - 150, y: 20, width: 31, height: 31}
+    let objectHeart2b = {x: this.canvas.width - 100, y: 20, width: 31, height: 31}
+    let objectHeart2c = {x: this.canvas.width - 50, y: 20, width: 31, height: 31}
     return {
       width: 35,
       height: 50,
@@ -70,12 +86,14 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 3
+      lives: 3,
+      //add array of hearts
+      hearts: side === 'left' ? [objectHeart1a, objectHeart1b, objectHeart1c] : [objectHeart2a, objectHeart2b, objectHeart2c]
     }
   }
 }
 
-//creating bullets
+//bullet object
 let Bullet = {
   new: function(side){
     return{
@@ -112,7 +130,6 @@ let Game = {
     //add bullets
     this.bullet1 = Bullet.new.call(this, 'left')
     this.bullet2 = Bullet.new.call(this, 'right')
-
 
     //add ball
     this.ball = Ball.new.call(this)
@@ -413,7 +430,6 @@ let Game = {
       }
     }
 
-    //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
     //check to see if player1 won the round
     if(this.player2a.lives === 0){
       //debugger
@@ -477,16 +493,14 @@ let Game = {
       this.player1.width,
       this.player1.height
     )
-
-
     //draw MiniPlayer1
     this.context.drawImage(
       player1a,
-
       this.player1a.x,
       this.player1a.y,
       this.player1a.width,
-      this.player1a.height
+      this.player1a.height,
+      //this.player1a.hearts
     )
     //draw bullet1
     this.context.fillRect(
@@ -509,7 +523,8 @@ let Game = {
       this.player2a.x,
       this.player2a.y,
       this.player2a.width,
-      this.player2a.height
+      this.player2a.height,
+      //this.player2a.hearts
     )
     //draw bullet2
     this.context.fillRect(
@@ -563,6 +578,19 @@ let Game = {
       'Defeat your opponent!' ,
       (this.canvas.width/2),
       50
+    )
+
+    //draw player1 lives(left)
+    this.context.fillText(
+      'Lives: ' + this.player1a.lives.toString(),
+      200,
+      100
+    )
+    //player2 lives
+    this.context.fillText(
+      'Lives: ' + this.player2a.lives.toString(),
+      this.canvas.width - 200,
+      100
     )
 
     //change font size for center score value
