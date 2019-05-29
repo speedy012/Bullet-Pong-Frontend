@@ -67,7 +67,7 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 3
+      lives: 2
     }
   }
 }
@@ -81,7 +81,7 @@ let Bullet = {
       x: side === 'left' ? 150 : this.canvas.width - 175,
       y: (this.canvas.height/2) - 5,
       move: DIRECTION.IDLE,
-      speed: 10
+      speed: 20
     }
   }
 }
@@ -291,17 +291,13 @@ let Game = {
       }
       //move ball in intended direction based on moveX and moveY values
       if(this.ball.moveY === DIRECTION.UP){
-        //console.log("ball up")
         this.ball.y -= (this.ball.speed/1.5)
       } else if(this.ball.moveY === DIRECTION.DOWN){
-        //console.log("ball down")
         this.ball.y += (this.ball.speed/1.5)
       }
       if(this.ball.moveX === DIRECTION.LEFT){
-        //console.log("ball left")
         this.ball.x -= this.ball.speed
       } else if(this.ball.moveX === DIRECTION.RIGHT){
-        //console.log("ball right")
         this.ball.x += this.ball.speed
       }
 
@@ -353,6 +349,7 @@ let Game = {
           this.bullet1.x = (this.player1.x + this.player1.width)
           this.bullet1.y = (this.player1.y + (this.player1.height/2))
           this.bullet1.move = DIRECTION.IDLE
+          this.player1.score += 5
         }
       }
       //bullet2
@@ -365,33 +362,82 @@ let Game = {
           this.bullet2.x = (this.player2.x - this.player2.width)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
+          this.player2.score += 5
+        }
+      }
+
+      //bullet goes off screen
+      if(this.bullet1.x - this.bullet1.width >= this.canvas.width){
+        console.log("bullet1 miss")
+        console.log(`${this.player2a.lives}`)
+        this.bullet1.x = (this.player1.x + this.player1.width)
+        this.bullet1.y = (this.player1.y + (this.player1.height/2))
+        this.bullet1.move = DIRECTION.IDLE
+      }
+      //bullet2
+      if(this.bullet2.x - this.bullet2.width <= 0){
+        console.log("bullet2 miss")
+        console.log(`${this.player1a.lives}`)
+        this.bullet2.x = (this.player2.x - this.player2.width)
+        this.bullet2.y = (this.player2.y + (this.player2.height/2))
+        this.bullet2.move = DIRECTION.IDLE
+      }
+
+      //bullet collision paddle
+      if(this.bullet1.x - this.bullet1.width >= this.player2.x && this.bullet1.y + this.bullet1.height >= this.player2.y){
+        if(this.bullet1.y <= this.player2.y + this.player2.height){
+          console.log("player2 shielded")
+          console.log(`${this.player2a.lives}`)
+          this.bullet1.x = (this.player1.x + this.player1.width)
+          this.bullet1.y = (this.player1.y + (this.player1.height/2))
+          this.bullet1.move = DIRECTION.IDLE
+        }
+      }
+      //bullet2
+      if(this.bullet2.x <= this.player1.x && this.bullet2.y + this.bullet2.height >= this.player1.y){
+        if(this.bullet2.y <= this.player1.y + this.player1.height){
+          console.log("player1 shielded")
+          console.log(`${this.player1a.lives}`)
+          this.bullet2.x = (this.player2.x - this.player2.width)
+          this.bullet2.y = (this.player2.y + (this.player2.height/2))
+          this.bullet2.move = DIRECTION.IDLE
         }
       }
     }
 
     //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
     //check to see if player1 won the round
-    if(this.player1.score === rounds[this.round]){
-      //check to see if there are any more rounds/levels left and display victory screen if there are not
-      if(!rounds[this.round + 1]){
-        this.over = true
-        setTimeout(function(){ Pong.endGameMenu('Player 1 Wins!')}, 1000)
-      } else {
-        //if there is another round, reset all values and increment round number
-        this.color = this._generateRoundColor()
-        this.player1.score = this.player2.score = 0
-        this.player1.speed += 0.5
-        this.player2.speed += 0.5
-        this.ball.speed += 1
-        this.round += 1
-
-        //beep3.play()
-      }
-    }
-    //check to see if player2 has won
-    else if(this.player2.score === rounds[this.round]){
+    if(this.player2a.lives === 0){
+      //debugger
       this.over = true
-      setTimeout(function(){ Pong.endGameMenu('Player 2 Wins!')}, 1000)
+      if(this.player1.score > this.player2.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 1 Wins!')
+        }, 1000)
+      } else if(this.player1.score < this.player2.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 2 Wins!')
+        }, 1000)
+      } else {
+        setTimeout(function(){
+          Pong.endGameMenu('Tie!')
+        }, 1000)
+      }
+    } else if(this.player1a.lives === 0){
+      this.over = true
+      if(this.player2.score > this.player1.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 2 Wins!')
+        }, 1000)
+      } else if(this.player2.score < this.player1.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 1 Wins!')
+        }, 1000)
+      } else {
+        setTimeout(function(){
+          Pong.endGameMenu('Tie!')
+        }, 1000)
+      }
     }
   },
 
