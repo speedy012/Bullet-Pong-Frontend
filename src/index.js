@@ -1,7 +1,13 @@
-document.addEventListener("DOMContentLoaded", function(){
-  //let newMusic = new Audio('./assets/blipStream.mp3')
-  //newMusic.play()
-})
+// document.addEventListener("DOMContentLoaded", function(){
+//   //let newMusic = new Audio('./assets/blipStream.mp3')
+//   //newMusic.play()
+// })
+
+
+
+
+
+// document.getElementById("audio").play(
 
 //Global Variables
 let DIRECTION = {
@@ -24,6 +30,11 @@ player2a.src = "./assets/miniPlayer.png"
 
 // Music
 //let newMusic = new Audio("./assets/blipStream.mp3")
+let sound = new Audio()
+function playSound() {
+  sound.src = "./assets/bensound-betterdays.mp3"
+  sound.play()
+}
 
 
 //Ball object
@@ -537,11 +548,23 @@ let Game = {
     document.addEventListener('keydown', function(key){
       //handle pressing key to start
       if(key.keyCode == 32){
-        if(Pong.running === false){
+        if(Pong.running === false) {
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
-          //newMusic.play()
+          // function pauseSound() {
+          //   sound.src = "./assets/bensound-betterdays.mp3"
+          //   sound.pause()
+          // }
+          playSound()
+           // newMusic.play()
+           // playAudio()
+           // myAudio.play();
+           // var myAudio = document.createElement("audio");
+           // myAudio.src = "./assets/blipStream.mp3";
+           // myAudio.play()
+          // new Audio('./assets/blipStream.mp3').play()
         }
+        // pauseSound()
       }
 
       //CONTROLS
