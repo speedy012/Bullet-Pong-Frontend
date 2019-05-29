@@ -393,6 +393,7 @@ let Game = {
           this.bullet1.y = (this.player1.y + this.player1.height/2)
           this.bullet1.move = DIRECTION.IDLE
           this.player1.score -= 3
+          this.player2.score += 2
         }
       }
       //bullet2
@@ -404,6 +405,7 @@ let Game = {
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
           this.bullet2.move = DIRECTION.IDLE
           this.player2.score -= 3
+          this.player1.score += 2
         }
       }
     }
