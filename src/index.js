@@ -408,12 +408,36 @@ let Game = {
     //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
     //check to see if player1 won the round
     if(this.player2a.lives === 0){
+      //debugger
       this.over = true
-      setTimeout(function(){
-        Pong.endGameMenu('Player 1 Wins!')}, 1000)
+      if(this.player1.score > this.player2.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 1 Wins!')
+        }, 1000)
+      } else if(this.player1.score < this.player2.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 2 Wins!')
+        }, 1000)
+      } else {
+        setTimeout(function(){
+          Pong.endGameMenu('Tie!')
+        }, 1000)
+      }
     } else if(this.player1a.lives === 0){
       this.over = true
-      setTimeout(function(){ Pong.endGameMenu('Player 2 Wins!')}, 1000)
+      if(this.player2.score > this.player1.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 2 Wins!')
+        }, 1000)
+      } else if(this.player2.score < this.player1.score){
+        setTimeout(function(){
+          Pong.endGameMenu('Player 1 Wins!')
+        }, 1000)
+      } else {
+        setTimeout(function(){
+          Pong.endGameMenu('Tie!')
+        }, 1000)
+      }
     }
   },
 
