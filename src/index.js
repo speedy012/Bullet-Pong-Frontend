@@ -1,13 +1,6 @@
 // document.addEventListener("DOMContentLoaded", function(){
-//   //let newMusic = new Audio('./assets/blipStream.mp3')
-//   //newMusic.play()
+//
 // })
-
-
-
-
-
-// document.getElementById("audio").play(
 
 //Global Variables
 let DIRECTION = {
@@ -29,13 +22,12 @@ let player2a = new Image()
 player2a.src = "./assets/MiniPlayerNormal.png"
 
 // Music
-//let newMusic = new Audio("./assets/blipStream.mp3")
 let sound = new Audio()
 function playSound() {
-  sound.src = "./assets/bensound-betterdays.mp3"
+  sound.src = "./assets/Funky-Chiptune.mp3"
   sound.play()
+  sound.loop = true
 }
-
 
 //Ball object
 let Ball = {
@@ -565,24 +557,16 @@ let Game = {
     )
 
     //change font size for center score text
-    this.context.font = '30px Courier New'
-
-    //draw winning score(center)
+    this.context.font = '40px Courier New'
+    //draw defeat opponent (center)
     this.context.fillText(
-      'Round ' + (Pong.round + 1),
+      'Defeat your opponent!' ,
       (this.canvas.width/2),
-      35
+      50
     )
 
     //change font size for center score value
     this.context.font = '40px Courier'
-
-    //draw current round number
-    this.context.fillText(
-      rounds[Pong.round] ? rounds[Pong.round] : rounds[Pong.round -1],
-      (this.canvas.width/2),
-      100
-    )
   },
 
   loop: function(){
@@ -602,20 +586,8 @@ let Game = {
         if(Pong.running === false) {
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
-          // function pauseSound() {
-          //   sound.src = "./assets/bensound-betterdays.mp3"
-          //   sound.pause()
-          // }
           playSound()
-           // newMusic.play()
-           // playAudio()
-           // myAudio.play();
-           // var myAudio = document.createElement("audio");
-           // myAudio.src = "./assets/blipStream.mp3";
-           // myAudio.play()
-          // new Audio('./assets/blipStream.mp3').play()
         }
-        // pauseSound()
       }
 
       //CONTROLS

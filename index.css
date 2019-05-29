@@ -1,15 +1,26 @@
 .main {
   display: flex;
-  padding-top: 10%;
+  width: 100%;
+  padding-top: 1%;
+  text-align: center;
 }
 
 
 .left.nes-container {
   padding-top: 15%;
   justify-content: space-evenly;
-  
+
 }
 
 .right.nes-container {
   padding-top: 15%;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 5%;
 }
