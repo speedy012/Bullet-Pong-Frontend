@@ -17,10 +17,10 @@ let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 
 //Create & Add Images
 let player1a = new Image()
-player1a.src = "./assets/miniPlayer.png"
+player1a.src = "./assets/MiniPlayerNormal.png"
 
 let player2a = new Image()
-player2a.src = "./assets/miniPlayer.png"
+player2a.src = "./assets/MiniPlayerNormal.png"
 
 // Music
 //let newMusic = new Audio("./assets/blipStream.mp3")
@@ -67,7 +67,7 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 2
+      lives: 3
     }
   }
 }
