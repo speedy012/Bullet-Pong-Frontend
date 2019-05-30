@@ -5,18 +5,20 @@
 }
 
 .header {
-  padding-top: 1%;
+  padding-top: 0.75%;
+  padding-right: 1%;
   text-align: right;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
-
+  line-height: 56%;
+  font-size: 11px;
 }
+
 
 .left.nes-container {
   padding-top: 15%;
   justify-content: space-evenly;
-
 }
 
 .right.nes-container {
@@ -29,5 +31,5 @@
   bottom: 0;
   width: 100%;
   text-align: center;
-  padding-bottom: 5%;
+  padding-bottom: 1%;
 }
