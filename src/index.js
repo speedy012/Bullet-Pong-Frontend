@@ -489,7 +489,7 @@ let Game = {
         if(this.player1.score > currentTopScore){
           currentTopScore = this.player1.score
           setTimeout(function(){
-            Pong.highScoreMenu(`New High Score: ${currentTopScore}`)
+            Pong.highScoreMenu(`Player 1 Wins! New High Score: ${currentTopScore}`)
             document.getElementById("topScore").innerHTML = currentTopScore
           }, 1000)
         } else {
@@ -501,7 +501,7 @@ let Game = {
         if(this.player2.score > currentTopScore){
           currentTopScore = this.player2.score
           setTimeout(function(){
-            Pong.highScoreMenu(`New High Score: ${currentTopScore}`)
+            Pong.highScoreMenu(`Player 2 Wins! New High Score: ${currentTopScore}`)
             document.getElementById("topScore").innerHTML = currentTopScore
           }, 1000)
         } else {
@@ -521,7 +521,7 @@ let Game = {
         if(this.player2.score > currentTopScore){
           currentTopScore = this.player2.score
           setTimeout(function(){
-            Pong.highScoreMenu(`New High Score: ${currentTopScore}`)
+            Pong.highScoreMenu(`Player 2 Wins! New High Score: ${currentTopScore}`)
             document.getElementById("topScore").innerHTML = currentTopScore
           }, 1000)
         } else {
@@ -533,7 +533,7 @@ let Game = {
         if(this.player1.score > currentTopScore){
           currentTopScore = this.player1.score
           setTimeout(function(){
-            Pong.highScoreMenu(`New High Score: ${currentTopScore}`)
+            Pong.highScoreMenu(`Player 1 Wins! New High Score: ${currentTopScore}`)
             document.getElementById("topScore").innerHTML = currentTopScore
           }, 1000)
         } else {
