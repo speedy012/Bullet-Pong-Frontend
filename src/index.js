@@ -1,13 +1,6 @@
 // document.addEventListener("DOMContentLoaded", function(){
-//   //let newMusic = new Audio('./assets/blipStream.mp3')
-//   //newMusic.play()
+//
 // })
-
-
-
-
-
-// document.getElementById("audio").play(
 
 //Global Variables
 let DIRECTION = {
@@ -24,18 +17,16 @@ let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 //Create & Add Images
 let player1a = new Image()
 player1a.src = "./assets/MiniPlayerNormal.png"
-
 let player2a = new Image()
 player2a.src = "./assets/MiniPlayerNormal.png"
 
 // Music
-//let newMusic = new Audio("./assets/blipStream.mp3")
 let sound = new Audio()
 function playSound() {
-  sound.src = "./assets/bensound-betterdays.mp3"
+  sound.src = "./assets/Funky-Chiptune.mp3"
   sound.play()
+  sound.loop = true
 }
-
 
 //Ball object
 let Ball = {
@@ -63,7 +54,6 @@ let Paddle = {
       score: 0,
       moveY: DIRECTION.IDLE,
       speed: 12,
-
     }
   }
 }
@@ -78,12 +68,12 @@ let MiniPlayer = {
       y: (this.canvas.height/2) - 35,
       moveY: DIRECTION.IDLE,
       speed: 5,
-      lives: 3
+      lives: 3,
     }
   }
 }
 
-//creating bullets
+//bullet object
 let Bullet = {
   new: function(side){
     return{
@@ -120,7 +110,6 @@ let Game = {
     //add bullets
     this.bullet1 = Bullet.new.call(this, 'left')
     this.bullet2 = Bullet.new.call(this, 'right')
-
 
     //add ball
     this.ball = Ball.new.call(this)
@@ -194,7 +183,6 @@ let Game = {
         this.color = this._generateRoundColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
-        //debugger
         console.log("right edge")
         Pong._resetTurn.call(this, this.player1, this.player2)
         this.color = this._generateRoundColor()
@@ -332,6 +320,8 @@ let Game = {
 					this.ball.x = (this.player1.x + this.ball.width);
           console.log("ball with player1")
 					this.ball.moveX = DIRECTION.RIGHT;
+          //score up on ball return
+          this.player1.score += 0.5
         }
       }
       //PLAYER 2
@@ -340,6 +330,8 @@ let Game = {
 					this.ball.x = (this.player2.x - this.ball.width);
           console.log("ball with player2")
 					this.ball.moveX = DIRECTION.LEFT;
+          //score up on ball return
+          this.player2.score += 0.5
         }
       }
 
@@ -421,7 +413,6 @@ let Game = {
       }
     }
 
-    //handle end of round transition (THIS WILL HAVE TO BE CHANGED)
     //check to see if player1 won the round
     if(this.player2a.lives === 0){
       //debugger
@@ -485,16 +476,13 @@ let Game = {
       this.player1.width,
       this.player1.height
     )
-
-
     //draw MiniPlayer1
     this.context.drawImage(
       player1a,
-
       this.player1a.x,
       this.player1a.y,
       this.player1a.width,
-      this.player1a.height
+      this.player1a.height,
     )
     //draw bullet1
     this.context.fillRect(
@@ -517,7 +505,7 @@ let Game = {
       this.player2a.x,
       this.player2a.y,
       this.player2a.width,
-      this.player2a.height
+      this.player2a.height,
     )
     //draw bullet2
     this.context.fillRect(
@@ -565,24 +553,29 @@ let Game = {
     )
 
     //change font size for center score text
-    this.context.font = '30px Courier New'
-
-    //draw winning score(center)
+    this.context.font = '40px Courier New'
+    //draw defeat opponent (center)
     this.context.fillText(
-      'Round ' + (Pong.round + 1),
+      'Defeat your opponent!' ,
       (this.canvas.width/2),
-      35
+      50
+    )
+
+    //draw player1 lives(left)
+    this.context.fillText(
+      'Lives: ' + this.player1a.lives.toString(),
+      200,
+      100
+    )
+    //player2 lives
+    this.context.fillText(
+      'Lives: ' + this.player2a.lives.toString(),
+      this.canvas.width - 200,
+      100
     )
 
     //change font size for center score value
     this.context.font = '40px Courier'
-
-    //draw current round number
-    this.context.fillText(
-      rounds[Pong.round] ? rounds[Pong.round] : rounds[Pong.round -1],
-      (this.canvas.width/2),
-      100
-    )
   },
 
   loop: function(){
@@ -602,20 +595,8 @@ let Game = {
         if(Pong.running === false) {
           Pong.running = true
           window.requestAnimationFrame(Pong.loop)
-          // function pauseSound() {
-          //   sound.src = "./assets/bensound-betterdays.mp3"
-          //   sound.pause()
-          // }
           playSound()
-           // newMusic.play()
-           // playAudio()
-           // myAudio.play();
-           // var myAudio = document.createElement("audio");
-           // myAudio.src = "./assets/blipStream.mp3";
-           // myAudio.play()
-          // new Audio('./assets/blipStream.mp3').play()
         }
-        // pauseSound()
       }
 
       //CONTROLS
