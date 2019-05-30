@@ -1,6 +1,15 @@
-// document.addEventListener("DOMContentLoaded", function(){
-//
-// })
+document.addEventListener("DOMContentLoaded", function(){
+  const playersBack = 'http://localhost:3000/api/v1/players'
+  fetch(playersBack)
+    .then(res => res.json())
+    .then(json => console.log(json))
+
+  const scoresBack = 'http://localhost:3000/api/v1/scores'
+  fetch(scoresBack)
+    .then(res => res.json())
+    .then(json => console.log(json))
+
+})
 
 //Global Variables
 let DIRECTION = {
@@ -10,6 +19,9 @@ let DIRECTION = {
   LEFT: 3,
   RIGHT: 4
 }
+
+let currentTopScore = 0
+document.getElementById("topScore").innerHTML = currentTopScore
 
 let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 
@@ -167,6 +179,33 @@ let Game = {
       Pong.initialize()
     }, 3000)
   },
+
+  highScoreMenu: function(text){
+    //font size and color
+    Pong.context.font = '50px Courier New'
+    Pong.context.fillStyle = this.color
+    //rectangle behind
+    Pong.context.fillRect(
+      Pong.canvas.width/2 - 350,
+      Pong.canvas.height/2 - 48,
+      700,
+      150
+    )
+    //canvas color
+    Pong.context.fillStyle = '#ffffff'
+    //menu text
+    Pong.context.fillText(
+      text,
+      Pong.canvas.width/2,
+      Pong.canvas.height/2 + 15
+    )
+
+    setTimeout(function(){
+      Pong = Object.assign({}, Game)
+      Pong.initialize()
+    }, 3000)
+  },
+
   menu: function(){
     //draw all Pong objects in their current state
     Pong.draw()
@@ -444,32 +483,64 @@ let Game = {
 
     //check to see if player1 killed player 2
     if(this.player2a.lives === 0){
-      this.player1.score += 10
+      this.player1.score += 5
       this.over = true
       if(this.player1.score > this.player2.score){
-        setTimeout(function(){
-          Pong.endGameMenu('Player 1 Wins!')
-        }, 1000)
+        if(this.player1.score > currentTopScore){
+          currentTopScore = this.player1.score
+          setTimeout(function(){
+            Pong.highScoreMenu(`Player 1 Wins! New High Score: ${currentTopScore}`)
+            document.getElementById("topScore").innerHTML = currentTopScore
+          }, 1000)
+        } else {
+          setTimeout(function(){
+            Pong.endGameMenu('Player 1 Wins!')
+          }, 1000)
+        }
       } else if(this.player1.score < this.player2.score){
-        setTimeout(function(){
-          Pong.endGameMenu('Player 2 Wins!')
-        }, 1000)
+        if(this.player2.score > currentTopScore){
+          currentTopScore = this.player2.score
+          setTimeout(function(){
+            Pong.highScoreMenu(`Player 2 Wins! New High Score: ${currentTopScore}`)
+            document.getElementById("topScore").innerHTML = currentTopScore
+          }, 1000)
+        } else {
+          setTimeout(function(){
+            Pong.endGameMenu('Player 2 Wins!')
+          }, 1000)
+        }
       } else {
         setTimeout(function(){
           Pong.endGameMenu('Tie!')
         }, 1000)
       }
     } else if(this.player1a.lives === 0){
-      this.player2.score += 10
+      this.player2.score += 5
       this.over = true
       if(this.player2.score > this.player1.score){
-        setTimeout(function(){
-          Pong.endGameMenu('Player 2 Wins!')
-        }, 1000)
+        if(this.player2.score > currentTopScore){
+          currentTopScore = this.player2.score
+          setTimeout(function(){
+            Pong.highScoreMenu(`Player 2 Wins! New High Score: ${currentTopScore}`)
+            document.getElementById("topScore").innerHTML = currentTopScore
+          }, 1000)
+        } else {
+          setTimeout(function(){
+            Pong.endGameMenu('Player 2 Wins!')
+          }, 1000)
+        }
       } else if(this.player2.score < this.player1.score){
-        setTimeout(function(){
-          Pong.endGameMenu('Player 1 Wins!')
-        }, 1000)
+        if(this.player1.score > currentTopScore){
+          currentTopScore = this.player1.score
+          setTimeout(function(){
+            Pong.highScoreMenu(`Player 1 Wins! New High Score: ${currentTopScore}`)
+            document.getElementById("topScore").innerHTML = currentTopScore
+          }, 1000)
+        } else {
+          setTimeout(function(){
+            Pong.endGameMenu('Player 1 Wins!')
+          }, 1000)
+        }
       } else {
         setTimeout(function(){
           Pong.endGameMenu('Tie!')
@@ -564,7 +635,7 @@ let Game = {
     this.context.strokeStyke = '#ffffff'
     this.context.stroke()
 
-    //set default canvas font and alight it to center
+    //set default canvas font and align it to center
     this.context.font = '100px Courier New'
     this.context.textAlign = 'center'
 
@@ -574,7 +645,6 @@ let Game = {
       (this.canvas.width/2) - 300,
       200
     )
-
     //draw player2 score (right)
     this.context.fillText(
       this.player2.score.toString(),
@@ -584,12 +654,6 @@ let Game = {
 
     //change font size for center score text
     this.context.font = '55px Courier New'
-    // //draw defeat opponent (center)
-    // this.context.fillText(
-    //   'Defeat your opponent!' ,
-    //   (this.canvas.width/2),
-    //   50
-    // )
 
     //draw player1 lives(left)
     this.context.fillText(
@@ -603,9 +667,6 @@ let Game = {
       this.canvas.width - 200,
       100
     )
-
-    //change font size for center score value
-    this.context.font = '40px Courier'
   },
 
   loop: function(){
