@@ -11,7 +11,6 @@ let DIRECTION = {
   RIGHT: 4
 }
 
-let rounds = [5, 5, 3, 3, 2]
 let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 
 //Create & Add Images
@@ -28,25 +27,25 @@ function playSound() {
   sound.loop = true
 }
 //sound effects
-let beep1 = new Audio()
-function playBeep1(){
-  beep1.src = "./assets/beep1.mp3"
-  beep1.play()
+let bounceBeep = new Audio()
+function playBounceBeep(){
+  bounceBeep.src = "./assets/bounce-beep.mp3"
+  bounceBeep.play()
 }
-let beep2 = new Audio()
-function playBeep2(){
-  beep2.src = "./assets/beep2.mp3"
-  beep2.play()
+let pointBeep = new Audio()
+function playPointBeep(){
+  pointBeep.src = "./assets/point-beep.mp3"
+  pointBeep.play()
 }
-let beep3 = new Audio()
-function playBeep3(){
-  beep3.src = "./assets/beep3.mp3"
-  beep3.play()
+let scoreBeep = new Audio()
+function playScoreBeep(){
+  scoreBeep.src = "./assets/score-beep.mp3"
+  scoreBeep.play()
 }
-let beep4 = new Audio()
-function playBeep4(){
-  beep4.src = "./assets/beep4.mp3"
-  beep4.play()
+let blockBeep = new Audio()
+function playBlockBeep(){
+  blockBeep.src = "./assets/block-beep.mp3"
+  blockBeep.play()
 }
 
 //Ball object
@@ -125,8 +124,6 @@ let Game = {
     this.player2 = Paddle.new.call(this, 'right')
     //add miniplayers
     this.player1a = MiniPlayer.new.call(this, 'left')
-     // this.player1a = new Image();
-    // this.player1a.src = "./Images/miniPlayer.png"
     this.player2a = MiniPlayer.new.call(this, 'right')
     //add bullets
     this.bullet1 = Bullet.new.call(this, 'left')
@@ -201,12 +198,12 @@ let Game = {
       if(this.ball.x <= 0){
         console.log("left edge")
         Pong._resetTurn.call(this, this.player2, this.player1)
-        this.color = this._generateRoundColor()
+        this.color = this._generateColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
         console.log("right edge")
         Pong._resetTurn.call(this, this.player1, this.player2)
-        this.color = this._generateRoundColor()
+        this.color = this._generateColor()
       }
       if(this.ball.y <= 0){
         console.log("top")
@@ -279,8 +276,7 @@ let Game = {
         this.player2a.y += this.player2a.speed
       }
 
-      //on new serve(start of each turn) move the ball to the correct side
-      //randomize direction to add challenge
+      //on new serve(start of each turn) move the ball to the correct side and randomize direction
       if(Pong._turnDelayIsOver.call(this) && this.turn){
         this.ball.moveX = this.turn === this.player1 ? DIRECTION.LEFT : DIRECTION.RIGHT
         this.ball.moveY = [DIRECTION.UP, DIRECTION.DOWN][Math.round(Math.random())]
@@ -341,6 +337,8 @@ let Game = {
 					this.ball.x = (this.player1.x + this.ball.width);
           console.log("ball with player1")
 					this.ball.moveX = DIRECTION.RIGHT;
+          //bounce beep
+          playBounceBeep()
           //score up on ball return
           this.player1.score += 0.5
         }
@@ -351,6 +349,8 @@ let Game = {
 					this.ball.x = (this.player2.x - this.ball.width);
           console.log("ball with player2")
 					this.ball.moveX = DIRECTION.LEFT;
+          //bounce beep
+          playBounceBeep()
           //score up on ball return
           this.player2.score += 0.5
         }
@@ -368,6 +368,8 @@ let Game = {
       if(this.bullet1.x - this.bullet1.width >= this.player2a.x && this.bullet1.y + this.bullet1.height >= this.player2a.y){
         if(this.bullet1.y <= this.player2a.y + this.player2a.height){
           console.log("player2 hit")
+          //life beep
+          playPointBeep()
           this.player2a.lives -= 1
           console.log(`${this.player2a.lives}`)
           this.bullet1.x = 110
@@ -380,6 +382,8 @@ let Game = {
       if(this.bullet2.x <= this.player1a.x && this.bullet2.y + this.bullet2.height >= this.player1a.y){
         if(this.bullet2.y <= this.player1a.y + this.player1a.height){
           console.log("player1 hit")
+          //life beep
+          playPointBeep()
           this.player1a.lives -= 1
           console.log(`${this.player1a.lives}`)
           this.bullet2.x = (this.canvas.width - 135)
@@ -412,6 +416,8 @@ let Game = {
       if(this.bullet1.x - this.bullet1.width >= this.player2.x && this.bullet1.y + this.bullet1.height >= this.player2.y){
         if(this.bullet1.y <= this.player2.y + this.player2.height){
           console.log("player2 shielded")
+          //block beep
+          playBlockBeep()
           console.log(`${this.player2a.lives}`)
           this.bullet1.x = 110
           this.bullet1.y = (this.player1.y + this.player1.height/2)
@@ -424,6 +430,8 @@ let Game = {
       if(this.bullet2.x <= this.player1.x && this.bullet2.y + this.bullet2.height >= this.player1.y){
         if(this.bullet2.y <= this.player1.y + this.player1.height){
           console.log("player1 shielded")
+          //block beep
+          playBlockBeep()
           console.log(`${this.player1a.lives}`)
           this.bullet2.x = (this.canvas.width - 135)
           this.bullet2.y = (this.player2.y + (this.player2.height/2))
@@ -434,9 +442,9 @@ let Game = {
       }
     }
 
-    //check to see if player1 won the round
+    //check to see if player1 killed player 2
     if(this.player2a.lives === 0){
-      //debugger
+      this.player1.score += 10
       this.over = true
       if(this.player1.score > this.player2.score){
         setTimeout(function(){
@@ -452,6 +460,7 @@ let Game = {
         }, 1000)
       }
     } else if(this.player1a.lives === 0){
+      this.player2.score += 10
       this.over = true
       if(this.player2.score > this.player1.score){
         setTimeout(function(){
@@ -671,7 +680,7 @@ let Game = {
     this.timer = (new Date().getTime())
 
     winner.score++
-    //beep2.play()
+    playScoreBeep()
   },
 
   //wait for delay to pass after each turn
@@ -679,11 +688,11 @@ let Game = {
     return((new Date()).getTime() - this.timer >= 1000)
   },
 
-  //select random color as background of each level/round
-  _generateRoundColor: function(){
+  //select random color as background after each normal pong score
+  _generateColor: function(){
     var newColor = colors[Math.floor(Math.random() * colors.length)]
     if(newColor === this.color){
-      return Pong._generateRoundColor()
+      return Pong._generateColor()
     }
     return newColor
   }
