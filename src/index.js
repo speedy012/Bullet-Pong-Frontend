@@ -583,13 +583,13 @@ let Game = {
     )
 
     //change font size for center score text
-    this.context.font = '40px Courier New'
-    //draw defeat opponent (center)
-    this.context.fillText(
-      'Defeat your opponent!' ,
-      (this.canvas.width/2),
-      50
-    )
+    this.context.font = '55px Courier New'
+    // //draw defeat opponent (center)
+    // this.context.fillText(
+    //   'Defeat your opponent!' ,
+    //   (this.canvas.width/2),
+    //   50
+    // )
 
     //draw player1 lives(left)
     this.context.fillText(

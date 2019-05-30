@@ -5,14 +5,14 @@
 }
 
 .header {
-  padding-top: 1%;
+  padding-top: 0.75%;
   padding-right: 1%;
   text-align: right;
   position: fixed;
   top: 0;
   right: 0;
-  line-height: 60%;
-  font-size: 10px;
+  line-height: 56%;
+  font-size: 11px;
 }
 
 
