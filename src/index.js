@@ -19,18 +19,6 @@ let player1a = new Image()
 player1a.src = "./assets/MiniPlayerNormal.png"
 let player2a = new Image()
 player2a.src = "./assets/MiniPlayerNormal.png"
-let heart1a = new Image()
-heart1a.src = "./assets/FullHeart.png"
-let heart1b = new Image()
-heart1a.src = "./assets/FullHeart.png"
-let heart1c = new Image()
-heart1a.src = "./assets/FullHeart.png"
-let heart2a = new Image()
-heart1a.src = "./assets/FullHeart.png"
-let heart2b = new Image()
-heart1a.src = "./assets/FullHeart.png"
-let heart2c = new Image()
-heart1a.src = "./assets/FullHeart.png"
 
 // Music
 let sound = new Audio()
@@ -73,12 +61,6 @@ let Paddle = {
 //MiniPlayers object
 let MiniPlayer = {
   new: function(side){
-    let objectHeart1a = {x: 150, y: 20, width: 31, height: 31}
-    let objectHeart1b = {x: 100, y: 20, width: 31, height: 31}
-    let objectHeart1c = {x: 50, y: 20, width: 31, height: 31}
-    let objectHeart2a = {x: this.canvas.width - 150, y: 20, width: 31, height: 31}
-    let objectHeart2b = {x: this.canvas.width - 100, y: 20, width: 31, height: 31}
-    let objectHeart2c = {x: this.canvas.width - 50, y: 20, width: 31, height: 31}
     return {
       width: 35,
       height: 50,
@@ -87,8 +69,6 @@ let MiniPlayer = {
       moveY: DIRECTION.IDLE,
       speed: 5,
       lives: 3,
-      //add array of hearts
-      hearts: side === 'left' ? [objectHeart1a, objectHeart1b, objectHeart1c] : [objectHeart2a, objectHeart2b, objectHeart2c]
     }
   }
 }
@@ -203,7 +183,6 @@ let Game = {
         this.color = this._generateRoundColor()
       }
       if(this.ball.x >= this.canvas.width - this.ball.width){
-        //debugger
         console.log("right edge")
         Pong._resetTurn.call(this, this.player1, this.player2)
         this.color = this._generateRoundColor()
@@ -341,6 +320,8 @@ let Game = {
 					this.ball.x = (this.player1.x + this.ball.width);
           console.log("ball with player1")
 					this.ball.moveX = DIRECTION.RIGHT;
+          //score up on ball return
+          this.player1.score += 0.5
         }
       }
       //PLAYER 2
@@ -349,6 +330,8 @@ let Game = {
 					this.ball.x = (this.player2.x - this.ball.width);
           console.log("ball with player2")
 					this.ball.moveX = DIRECTION.LEFT;
+          //score up on ball return
+          this.player2.score += 0.5
         }
       }
 
@@ -500,7 +483,6 @@ let Game = {
       this.player1a.y,
       this.player1a.width,
       this.player1a.height,
-      //this.player1a.hearts
     )
     //draw bullet1
     this.context.fillRect(
@@ -524,7 +506,6 @@ let Game = {
       this.player2a.y,
       this.player2a.width,
       this.player2a.height,
-      //this.player2a.hearts
     )
     //draw bullet2
     this.context.fillRect(
