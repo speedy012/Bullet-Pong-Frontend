@@ -27,6 +27,27 @@ function playSound() {
   sound.play()
   sound.loop = true
 }
+//sound effects
+let beep1 = new Audio()
+function playBeep1(){
+  beep1.src = "./assets/beep1.mp3"
+  beep1.play()
+}
+let beep2 = new Audio()
+function playBeep2(){
+  beep2.src = "./assets/beep2.mp3"
+  beep2.play()
+}
+let beep3 = new Audio()
+function playBeep3(){
+  beep3.src = "./assets/beep3.mp3"
+  beep3.play()
+}
+let beep4 = new Audio()
+function playBeep4(){
+  beep4.src = "./assets/beep4.mp3"
+  beep4.play()
+}
 
 //Ball object
 let Ball = {
