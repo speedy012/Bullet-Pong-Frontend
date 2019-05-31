@@ -23,7 +23,7 @@ let DIRECTION = {
 let currentTopScore = 0
 document.getElementById("topScore").innerHTML = currentTopScore
 
-let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
+let colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6', '#c66a67']
 
 //Create & Add Images
 let player1a = new Image()
