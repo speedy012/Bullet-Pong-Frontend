@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", function(){
-  const playersBack = 'http://localhost:3000/api/v1/players'
-  fetch(playersBack)
-    .then(res => res.json())
-    .then(json => console.log(json))
-
-  const scoresBack = 'http://localhost:3000/api/v1/scores'
-  fetch(scoresBack)
-    .then(res => res.json())
-    .then(json => console.log(json))
-
+  // const playersBack = 'http://localhost:3000/api/v1/players'
+  // fetch(playersBack)
+  //   .then(res => res.json())
+  //   .then(json => console.log(json))
+  //
+  // const scoresBack = 'http://localhost:3000/api/v1/scores'
+  // fetch(scoresBack)
+  //   .then(res => res.json())
+  //   .then(json => console.log(json))
+//we tried
 })
 
 //Global Variables
